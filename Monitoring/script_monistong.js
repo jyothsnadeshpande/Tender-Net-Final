@@ -25,30 +25,31 @@
  * @transaction
  */
 async function engineerValidate(engineerValidate){
-    const contract = engineerValidate.engineerValidationData.contract;
+  const contract = engineerValidate.engineerValidationData.contract;
   if(!engineerValidate.engineerValidationData.validation){
     engineerValidate.engineerValidationData.validation = []
   }
   
-  if(contract.document.length == engineerValidate.engineerValidationData.validation.length){
-    for(var i = 0; i<contract.document.length;i++){
-      if(engineerValidate.engineerValidationData.validation[i] !== contract.document.length[i]){
+  if(contract.documents.length == engineerValidate.engineerValidationData.validation.length){
+    for(var i = 0; i<contract.documents.length;i++){
+      var id = contract.documents[i].documentId;
+      if(engineerValidate.engineerValidationData.validation[i] !== id){
         throw new Error("RECHECK VALIDATION ARRAY");
       }
     }
         engineerValidate.contract.engineerValidationStatus = "Validated";
   }
-  
   else
   {
     
-    for(var i = 0; i<contract.document.length;i++){
-        if(engineerValidate.engineerValidationData.validation[i] !== contract.document.length[i]){
-          engineerValidate.engineerValidationData.notValidated.push(contract.document.length[i]);
+    for(var i = 0; i<contract.documents.length;i++){
+      var id = contract.documents[i].documentId;      
+        if(engineerValidate.engineerValidationData.validation[i] !== id){
+          engineerValidate.engineerValidationData.notValidated.push(contract.documents[i]);
           
         }
     }
-        engineerValidate.engineerValidationData.contract.engineerValidationStatus = " Not Validated";
+        engineerValidate.engineerValidationData.contract.engineerValidationStatus = "Not Validated";
   }
   
     const contractValidationRegistry = await getAssetRegistry('org.acme.contract.Contract');
