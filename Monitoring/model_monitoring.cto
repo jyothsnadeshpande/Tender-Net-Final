@@ -21,7 +21,7 @@ asset Contract identified by contractId {
   o String contractId
   --> Contractor contractor
   o Double value
-  o SubmitDocument[] documents optional
+  o SubmitDocument[] documents
   o String engineerValidationStatus optional
   o String labourRepValidationStatus optional
   o String supplierValidationStatus optional
@@ -105,21 +105,13 @@ transaction CloseContract {
 
 transaction Engineer_Validate{
   --> EngineerValidationData engineerValidationData
-  //o String[] validate
-  //o String[] notValidated optional
-  
-  
 }
 
 transaction Supplier_Validate{
- // o String[] validate
-  //o String[] notValidated optional
   --> SupplierValidationData supplierValidationData
   
 }
 
 transaction LabourRep_Validate{
   --> LabourRepValidationData laborRepValidationData
-  //o String[] validate 
-  //o String[] notValidated optional
 }
