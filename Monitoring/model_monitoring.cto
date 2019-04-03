@@ -100,7 +100,7 @@ transaction SubmitDocument {
 
 transaction CloseContract {
   --> Contract contract
-  o Double expenditure
+  //o Double expenditure
 }
 
 transaction Engineer_Validate{
