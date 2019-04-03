@@ -143,9 +143,11 @@ async function submitDocument(submitDocument){
         document.contract.documents = [];
     }   
     document.contract.documents.push(submitDocument);
-    const documentRegistry = await getAssetRegistry(org.acme.contract.Contract);
+    const documentRegistry = await getAssetRegistry('org.acme.contract.Document');
     await documentRegistry.update(document);
-    
+  	const contractRegistry = await getAssetRegistry('org.acme.contract.Contract');
+    await contractRegistry.update(document.contract);  
+  
 }
 /**
  * Close the contract once the project is over
@@ -158,8 +160,8 @@ async function closeContract(closeContract){
         throw new Error('Closed Already');
     }
     closeContract.expenditure = 0;
-    for(var i = 0; i < contract.document.length; i++){
-        closeContract.expenditure += contract.document[i].amount;
+    for(var i = 0; i < contract.documents.length; i++){
+        closeContract.expenditure += contract.documents[i].amount;
     }
     closeContract.contract.value = closeContract.expenditure;
     contract.state = 'CLOSED';
