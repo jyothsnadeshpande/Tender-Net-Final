@@ -16,7 +16,7 @@
 
 /**
  * Close the bidding for a tender listing and choose the
- * lowest bid that is over the asking price
+ * lowest bid that is under the asking price
  * @param {org.acme.tender.auction.CloseBidding} closeBidding - the closeBidding transaction
  * @transaction
  */
@@ -41,14 +41,7 @@ async function closeBidding(closeBidding) {  // eslint-disable-line no-unused-va
             listing.state = 'CLOSED';
             contractor = lowestOffer.member;
             department = listing.tender.owner;
-            // update the balance of the department
-            console.log('#### department balance before: ' + department.balance);
-            department.balance -= lowestOffer.bidPrice;
-            console.log('#### department balance after: ' + department.balance);
-            // update the balance of the contractor
-            console.log('#### contractor balance before: ' + contractor.balance);
-            contractor.balance += lowestOffer.bidPrice;
-            console.log('#### contractor balance after: ' + contractor.balance);
+            
             // transfer the tender to the contractor
             listing.tender.owner = contractor;
             // clear the offers
