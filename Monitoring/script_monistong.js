@@ -26,23 +26,13 @@ async function engineerValidate(engineerValidate){
   }
   
     for(var i = 0; i<data.length;i++){
-      //var id = contract.documents[i].documentId;
       if(engineerValidate.engineerValidationData.validation[i] !== data[i]){
         engineerValidate.engineerValidationData.contract.engineerValidationStatus = "Not Validated";
       }
       else{
-        engineerValidate.contract.engineerValidationStatus = "Validated";      	
+        engineerValidate.contract.engineerValidationStatus = "Validated";       
       }
     }
-
-    
-    /*for(var i = 0; i<contract.documents.length;i++){
-      var id = contract.documents[i].documentId;      
-        if(engineerValidate.engineerValidationData.validation[i] !== id){
-          engineerValidate.engineerValidationData.notValidated.push(contract.documents[i]);
-          
-        }
-    }*/
     const contractValidationRegistry = await getAssetRegistry('org.acme.contract.Contract');
     await contractValidationRegistry.update(contract);
 }
@@ -54,32 +44,19 @@ async function engineerValidate(engineerValidate){
  * @transaction
  */
 async function labourRepValidate(labourRepValidate){
-    const contract =labourRepValidate.labourRepValidationData.contract;
+  const contract = labourRepValidate.labourRepValidationData.contract;
   if(!labourRepValidate.labourRepValidationData.validation){
     labourRepValidate.labourRepValidationData.validation = []
   }
   
-  if(contract.document.length == labourRep.labourRepValidationData.validation.length){
-    for(var i = 0; i<contract.document.length;i++){
-      if(labourRepValidate.labourRepValidationData.validation[i] !== contract.document.length[i]){
-        throw new Error("RECHECK VALIDATION ARRAY");
+    for(var i = 0; i<data.length;i++){
+      if(labourRepValidate.labourRepValidationData.validation[i] !== data[i]){
+        labourRepValidate.labourRepValidationData.contract.labourRepValidationStatus = "Not Validated";
+      }
+      else{
+        labourRepValidate.contract.labourRepValidationStatus = "Validated";       
       }
     }
-        labourRepValidate.contract.labourRepValidationStatus = "Validated";
-  }
-  
-  else
-  {
-    
-    for(var i = 0; i<contract.document.length;i++){
-        if(labourRepValidate.labourRepValidationData.validation[i] !== contract.document.length[i]){
-          labourRepValidate.labourRepValidationData.notValidated.push(contract.document.length[i]);
-          
-        }
-    }
-        labourRepValidate.labourRepValidationData.contract.labourRepValidationStatus = " Not Validated";
-  }
-  
     const contractValidationRegistry = await getAssetRegistry('org.acme.contract.Contract');
     await contractValidationRegistry.update(contract);
 }
@@ -91,32 +68,19 @@ async function labourRepValidate(labourRepValidate){
  * @transaction
  */
 async function suppplierValidate(supplierValidate){
-    const contract =suppplierValidate.suppplierValidationData.contract;
-  if(!suppplierValidate.suppplierValidationData.validation){
-    suppplierValidate.suppplierValidationData.validation = []
+  const contract = supplierValidate.supplierValidationData.contract;
+  if(!supplierValidate.supplierValidationData.validation){
+    supplierValidate.supplierValidationData.validation = []
   }
   
-  if(contract.document.length == suppplier.suppplierValidationData.validation.length){
-    for(var i = 0; i<contract.document.length;i++){
-      if(suppplierValidate.suppplierValidationData.validation[i] !== contract.document.length[i]){
-        throw new Error("RECHECK VALIDATION ARRAY");
+    for(var i = 0; i<data.length;i++){
+      if(supplierValidate.supplierValidationData.validation[i] !== data[i]){
+        supplierValidate.supplierValidationData.contract.supplierValidationStatus = "Not Validated";
+      }
+      else{
+        supplierValidate.contract.supplierValidationStatus = "Validated";       
       }
     }
-        suppplierValidate.contract.suppplierValidationStatus = "Validated";
-  }
-  
-  else
-  {
-    
-    for(var i = 0; i<contract.document.length;i++){
-        if(suppplierValidate.suppplierValidationData.validation[i] !== contract.document.length[i]){
-          suppplierValidate.suppplierValidationData.notValidated.push(contract.document.length[i]);
-          
-        }
-    }
-        suppplierValidate.suppplierValidationData.contract.suppplierValidationStatus = " Not Validated";
-  }
-  
     const contractValidationRegistry = await getAssetRegistry('org.acme.contract.Contract');
     await contractValidationRegistry.update(contract);
 }
@@ -135,10 +99,10 @@ async function submitDocument(submitDocument){
         document.contract.documents = [];
     }   
     document.contract.documents.push(submitDocument);
-  	data.push("1");
+    data.push("1");
     const documentRegistry = await getAssetRegistry('org.acme.contract.Document');
     await documentRegistry.update(document);
-  	const contractRegistry = await getAssetRegistry('org.acme.contract.Contract');
+    const contractRegistry = await getAssetRegistry('org.acme.contract.Contract');
     await contractRegistry.update(document.contract);  
   
 }
@@ -152,13 +116,7 @@ async function closeContract(closeContract){
     if(contract.state !== 'OPEN'){
         throw new Error('Closed Already');
     }
-    closeContract.expenditure = 0;
-    for(var i = 0; i < contract.documents.length; i++){
-        closeContract.expenditure += contract.documents[i].amount;
-    }
-    closeContract.contract.value = closeContract.expenditure;
     contract.state = 'CLOSED';
-    
     const contractAssetRegistry = await getAssetRegistry('org.acme.contract.Contract');
     await contractAssetRegistry.update(contract);
 }
