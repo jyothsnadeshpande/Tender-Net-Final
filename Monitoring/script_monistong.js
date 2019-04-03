@@ -11,47 +11,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+data = new Array();
 /* global getAssetRegistry getFactory emit */
-/**
- * Submit validations
- * @param {org.acme.contract.Engineer_Validate} engineerValidate - document validation
- * @transaction
- */
-
 /**
  * Submit an Enginnner's validation
  * @param {org.acme.contract.Engineer_Validate} engineerValidate - valdation to be submitted
  * @transaction
  */
+
 async function engineerValidate(engineerValidate){
   const contract = engineerValidate.engineerValidationData.contract;
   if(!engineerValidate.engineerValidationData.validation){
     engineerValidate.engineerValidationData.validation = []
   }
   
-  if(contract.documents.length == engineerValidate.engineerValidationData.validation.length){
-    for(var i = 0; i<contract.documents.length;i++){
-      var id = contract.documents[i].documentId;
-      if(engineerValidate.engineerValidationData.validation[i] !== id){
-        throw new Error("RECHECK VALIDATION ARRAY");
+    for(var i = 0; i<data.length;i++){
+      //var id = contract.documents[i].documentId;
+      if(engineerValidate.engineerValidationData.validation[i] !== data[i]){
+        engineerValidate.engineerValidationData.contract.engineerValidationStatus = "Not Validated";
+      }
+      else{
+        engineerValidate.contract.engineerValidationStatus = "Validated";      	
       }
     }
-        engineerValidate.contract.engineerValidationStatus = "Validated";
-  }
-  else
-  {
+
     
-    for(var i = 0; i<contract.documents.length;i++){
+    /*for(var i = 0; i<contract.documents.length;i++){
       var id = contract.documents[i].documentId;      
         if(engineerValidate.engineerValidationData.validation[i] !== id){
           engineerValidate.engineerValidationData.notValidated.push(contract.documents[i]);
           
         }
-    }
-        engineerValidate.engineerValidationData.contract.engineerValidationStatus = "Not Validated";
-  }
-  
+    }*/
     const contractValidationRegistry = await getAssetRegistry('org.acme.contract.Contract');
     await contractValidationRegistry.update(contract);
 }
@@ -144,6 +135,7 @@ async function submitDocument(submitDocument){
         document.contract.documents = [];
     }   
     document.contract.documents.push(submitDocument);
+  	data.push("1");
     const documentRegistry = await getAssetRegistry('org.acme.contract.Document');
     await documentRegistry.update(document);
   	const contractRegistry = await getAssetRegistry('org.acme.contract.Contract');
