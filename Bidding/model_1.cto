@@ -13,7 +13,7 @@
  */
 
 /**
- * Defines a data model for a blind vehicle auction
+ * Defines a data model for a tender auction
  */
 namespace org.acme.tender.auction
 
@@ -37,14 +37,13 @@ asset TenderListing identified by listingId {
   --> Tender tender
 }
 
-abstract participant User identified by email {
-  o String email
+abstract participant User identified by username {
+  o String username
   o String firstName
   o String lastName
 }
 
 participant Member extends User {
-  o Double balance
 }
 
 participant Auctioneer extends User {
