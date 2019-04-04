@@ -37,7 +37,6 @@ asset Document identified by documentId{
 
 abstract asset ValidationData {
   o String[] validation optional
-  o String[] notValidated optional
   --> Contract contract
 }
 
