@@ -23,14 +23,6 @@ rule Contractor {
     action: ALLOW
 }
 
-rule LabourRep {
-    description: "Allow the LabourRep full access"
-    participant: "org.acme.contract.LabourRep"
-    operation: ALL
-    resource: "org.acme.contract.*"
-    action: ALLOW
-}
-
 rule Department {
     description: "Allow the Department full access"
     participant: "org.acme.contract.Department"
@@ -39,26 +31,34 @@ rule Department {
     action: ALLOW
 }
 
-rule PublicRep {
-    description: "Allow the PublicRep full access"
-    participant: "org.acme.contract.PublicRep"
+rule LabourRep {
+    description: "Allow the LabourRep access to LabourValidationData"
+    participant: "org.acme.contract.LabourRep"
     operation: ALL
-    resource: "org.acme.contract.*"
+    resource: "org.acme.contract.LabourRepValidationData"
     action: ALLOW
 }
 
 rule Engineer {
-    description: "Allow the Engineer full access"
+    description: "Allow the Engineer access to EngineerValidationData"
     participant: "org.acme.contract.Engineer"
     operation: ALL
-    resource: "org.acme.contract.*"
+    resource: "org.acme.contract.EngineerValidationData"
     action: ALLOW
 }
 
 rule Supplier {
-    description: "Allow the Supplier full access"
+    description: "Allow the Supplier access to SupplierValidationData"
     participant: "org.acme.contract.Supplier"
     operation: ALL
+    resource: "org.acme.contract.SupplierValidationData"
+    action: ALLOW
+}
+
+rule PublicRep {
+    description: "Allow the PublicRep full access"
+    participant: "org.acme.contract.PublicRep"
+    operation: READ
     resource: "org.acme.contract.*"
     action: ALLOW
 }
