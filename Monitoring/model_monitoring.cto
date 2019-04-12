@@ -112,5 +112,5 @@ transaction Supplier_Validate{
 }
 
 transaction LabourRep_Validate{
-  --> LabourRepValidationData laborRepValidationData
+  --> LabourRepValidationData labourRepValidationData
 }
