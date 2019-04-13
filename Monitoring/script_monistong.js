@@ -1,4 +1,6 @@
-/*
+/**
+ * New script file
+ *//*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -8,31 +10,37 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * See the License for the specific language gover
+ ning permissions and
  * limitations under the License.
  */
-data = new Array();
 /* global getAssetRegistry getFactory emit */
 /**
  * Submit an Enginnner's validation
- * @param {org.acme.contract.Engineer_Validate} engineerValidate - valdation to be submitted
+ * @param {org.acme.contract.Engineer_Validate} engineerValidate - vali
+ dation to be submitted
  * @transaction
  */
 
 async function engineerValidate(engineerValidate){
   const contract = engineerValidate.engineerValidationData.contract;
+  var flag = 1;
   if(!engineerValidate.engineerValidationData.validation){
     engineerValidate.engineerValidationData.validation = []
   }
-  
-    for(var i = 0; i<data.length;i++){
-      if(engineerValidate.engineerValidationData.validation[i] !== data[i]){
-        engineerValidate.engineerValidationData.contract.engineerValidationStatus = "Not Validated";
+    
+     contract.engineerValidationStatus = "Not Validated";
+  for(var i = 0; i<contract.data.length;i++){
+      if(engineerValidate.engineerValidationData.validation[i] !== contract.data[i]){
+        flag = 0;
+        break;
       }
-      else{
-        engineerValidate.contract.engineerValidationStatus = "Validated";       
-      }
+     
     }
+        if(flag==1){
+        contract.engineerValidationStatus = "Validated";       
+        }
+    
     const contractValidationRegistry = await getAssetRegistry('org.acme.contract.Contract');
     await contractValidationRegistry.update(contract);
 }
@@ -43,20 +51,25 @@ async function engineerValidate(engineerValidate){
  * @param {org.acme.contract.LabourRep_Validate} labourRepValidate - valdation to be submitted
  * @transaction
  */
-async function labourRepValidate(labourRepValidate){
+ async function labourRepValidate(labourRepValidate){
   const contract = labourRepValidate.labourRepValidationData.contract;
+  var flag = 1;
   if(!labourRepValidate.labourRepValidationData.validation){
     labourRepValidate.labourRepValidationData.validation = []
   }
-  
-    for(var i = 0; i<data.length;i++){
-      if(labourRepValidate.labourRepValidationData.validation[i] !== data[i]){
-        labourRepValidate.labourRepValidationData.contract.labourRepValidationStatus = "Not Validated";
+    
+     contract.labourRepValidationStatus = "Not Validated";
+      for(var i = 0; i<contract.data.length;i++){
+      if(labourRepValidate.labourRepValidationData.validation[i] !== contract.data[i]){
+        flag = 0;
+        break;
       }
-      else{
-        labourRepValidate.contract.labourRepValidationStatus = "Validated";       
-      }
+     
     }
+        if(flag){
+        contract.labourRepValidationStatus = "Validated";       
+        }
+    
     const contractValidationRegistry = await getAssetRegistry('org.acme.contract.Contract');
     await contractValidationRegistry.update(contract);
 }
@@ -67,23 +80,30 @@ async function labourRepValidate(labourRepValidate){
  * @param {org.acme.contract.Supplier_Validate} SupplierValidate - valdation to be submitted
  * @transaction
  */
-async function suppplierValidate(supplierValidate){
+ async function supplierValidate(supplierValidate){
   const contract = supplierValidate.supplierValidationData.contract;
+  var flag = 1;
   if(!supplierValidate.supplierValidationData.validation){
     supplierValidate.supplierValidationData.validation = []
   }
-  
-    for(var i = 0; i<data.length;i++){
-      if(supplierValidate.supplierValidationData.validation[i] !== data[i]){
-        supplierValidate.supplierValidationData.contract.supplierValidationStatus = "Not Validated";
+    
+     contract.supplierValidationStatus = "Not Validated";
+     
+      for(var i = 0; i<contract.data.length;i++){
+      if(supplierValidate.supplierValidationData.validation[i] !== contract.data[i]){
+        flag = 0;
+        break;
       }
-      else{
-        supplierValidate.contract.supplierValidationStatus = "Validated";       
-      }
+     
     }
+        if(flag){
+        contract.supplierValidationStatus = "Validated";       
+        }
+    
     const contractValidationRegistry = await getAssetRegistry('org.acme.contract.Contract');
     await contractValidationRegistry.update(contract);
 }
+
 
 /**
  * Submit a document
@@ -99,7 +119,7 @@ async function submitDocument(submitDocument){
         document.contract.documents = [];
     }   
     document.contract.documents.push(submitDocument);
-    data.push("1");
+    document.contract.data.push("1");
     const documentRegistry = await getAssetRegistry('org.acme.contract.Document');
     await documentRegistry.update(document);
     const contractRegistry = await getAssetRegistry('org.acme.contract.Contract');
@@ -116,7 +136,17 @@ async function closeContract(closeContract){
     if(contract.state !== 'OPEN'){
         throw new Error('Closed Already');
     }
-    contract.state = 'CLOSED';
+  
+   if(contract.engineerValidationStatus == 'Validated' && contract.labourRepValidationStatus == 'Validated' &&       contract.supplierValidationStatus == 'Validated' && contract.validationState == 'OPEN_FOR_VALIDATION'){
+        contract.validationState == 'VALIDATION_OVER';
+        contract.state = 'CLOSED';
+    }  
+  
+  else{
+        //print a message 
+        throw new Error('Validation Incomplete');
+  }
+    
     const contractAssetRegistry = await getAssetRegistry('org.acme.contract.Contract');
     await contractAssetRegistry.update(contract);
 }
