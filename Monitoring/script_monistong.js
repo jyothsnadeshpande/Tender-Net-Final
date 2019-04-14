@@ -138,7 +138,7 @@ async function closeContract(closeContract){
     }
   
    if(contract.engineerValidationStatus == 'Validated' && contract.labourRepValidationStatus == 'Validated' &&       contract.supplierValidationStatus == 'Validated' && contract.validationState == 'OPEN_FOR_VALIDATION'){
-        contract.validationState == 'VALIDATION_OVER';
+        contract.validationState = 'VALIDATION_OVER';
         contract.state = 'CLOSED';
     }  
   
